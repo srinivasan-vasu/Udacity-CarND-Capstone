@@ -22,9 +22,9 @@ as well as to verify your TL classifier.
 TODO (for Yousuf and Aaron): Stopline location for each traffic light.
 '''
 
-LOOKAHEAD_WPS = 200 # Number of waypoints we will publish. You can change this number
-REFRESH_RATE = 30 # Refresh final waypoints at a rate of 30 Hz
-MAX_DECEL = 0.5 
+LOOKAHEAD_WPS = 100 # Number of waypoints we will publish. You can change this number
+REFRESH_RATE = 10 # Refresh final waypoints at a rate of 30 Hz
+MAX_DECEL = 0.5
 
 
 class WaypointUpdater(object):
@@ -33,7 +33,7 @@ class WaypointUpdater(object):
 
         rospy.Subscriber('/current_pose', PoseStamped, self.pose_cb)
         rospy.Subscriber('/base_waypoints', Lane, self.waypoints_cb)
-        
+
 
         # TODO: Add a subscriber for /traffic_waypoint and /obstacle_waypoint below
         rospy.Subscriber('/traffic_waypoint', Int32, self.traffic_cb)
@@ -49,7 +49,7 @@ class WaypointUpdater(object):
         self.waypoints_tree = None
 
         self.loop()
-        
+
     def loop(self):
         rate = rospy.Rate(REFRESH_RATE)
         while not rospy.is_shutdown():
@@ -57,39 +57,41 @@ class WaypointUpdater(object):
             if self.current_pose and self.base_waypoints:
                 self.publish_waypoints()
             rate.sleep()
-            
+
     def find_closest_waypoint_idx(self):
         # find the index of the base waypoint which is closest to the vehicle
         vehicle_coords = (self.current_pose.position.x, self.current_pose.position.y)
         closest_waypoint_idx = self.waypoints_tree.query(vehicle_coords, 1)[1]
-        
+
         # verify that the vehicle is behind the detected nearest waypoint
         waypoint_coords = self.unpack_waypoint_coords(self.base_waypoints.waypoints[closest_waypoint_idx])
         previous_waypoint_coords = self.unpack_waypoint_coords(self.base_waypoints.waypoints[closest_waypoint_idx-1])
         if not self.is_behind(vehicle_coords, waypoint_coords, previous_waypoint_coords):
             # detected waypoint is behind vehicle, therefore select next waypoint
             closest_waypoint_idx = (closest_waypoint_idx + 1) % len(self.base_waypoints.waypoints)
-            
+
         return closest_waypoint_idx
-    
+
     def publish_waypoints(self):
         final_lane = self.generate_lane()
         self.final_waypoints_pub.publish(final_lane)
 
     def generate_lane(self):
         lane = Lane()
-        
+
         closest_idx = self.find_closest_waypoint_idx()
         farthest_idx = closest_idx + LOOKAHEAD_WPS
         base_waypoints = self.base_waypoints.waypoints[closest_idx:farthest_idx]
 
         if self.stopline_wp_idx == -1 or (self.stopline_wp_idx >= farthest_idx):
             lane.waypoints = base_waypoints
+            rospy.logwarn("GO")
         else:
             lane.waypoints = self.deceleration_waypoint(base_waypoints, closest_idx)
+            rospy.logwarn("STOP")
 
-        return lane 
-        
+        return lane
+
     def deceleration_waypoint(self, waypoints, closest_idx):
         temp = []
 
@@ -101,7 +103,7 @@ class WaypointUpdater(object):
             stop_idx = max(self.stopline_wp_idx - closest_idx - 2, 0)# -2 to keep the car before the stop line not on it.
             dist = self.distance(waypoints, i, stop_idx)
             vel = math.sqrt(2* MAX_DECEL* dist)
-            
+
             if vel  < 1.0:
                 vel = 0
 
@@ -111,29 +113,29 @@ class WaypointUpdater(object):
         return temp
 
 
-        
+
     def unpack_waypoint_coords(self, waypoint):
         return (waypoint.pose.pose.position.x, waypoint.pose.pose.position.y)
-        
+
     def is_behind(self, ref_point_coords, waypoint_coords, previous_waypoint_coords):
         # is reference point behind waypoint?
         (x, y) = ref_point_coords
         (wx, wy) = waypoint_coords
         (wprev_x, wprev_y) = previous_waypoint_coords
-        
+
         # evaluate dot product defining plane perpendicular to road
         (v1x, v1y) = (wx - wprev_x, wy - wprev_y)
         (v2x, v2y) = (x - wx, y - wy)
         normal = v1x * v2x + v1y * v2y
         return normal < 0
-            
+
     def construct_final_waypoints(self, start_idx):
         end_idx = start_idx + LOOKAHEAD_WPS
         final_waypoints = Lane()
         final_waypoints.header = self.base_waypoints.header
         final_waypoints.waypoints = self.base_waypoints.waypoints[start_idx:end_idx]
         return final_waypoints
-        
+
     def pose_cb(self, msg):
         self.current_pose = msg.pose
 

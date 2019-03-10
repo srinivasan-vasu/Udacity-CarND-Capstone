@@ -57,7 +57,36 @@ class TLDetector(object):
         self.state_count = 0
         self.frame_count = 0;
 
-        rospy.spin()
+        #rospy.spin()
+        self.ros_spin()
+
+    def ros_spin(self):
+        rate = rospy.Rate(10)
+        while not rospy.is_shutdown():
+            if self.camera_image is not None and self.waypoints is not None:
+                light_wp, state = self.process_traffic_lights()
+                rospy.logwarn("Closet light wp: {0} \n And light state: {1}".format(light_wp, self.tlstate[state]))
+
+                '''
+                Publish upcoming red lights at camera frequency.
+                Each predicted state has to occur `STATE_COUNT_THRESHOLD` number
+                of times till we start using it. Otherwise the previous stable state is
+                used.
+                '''
+                if self.state != state:
+                    self.state_count = 0
+                    self.state = state
+                elif self.state_count >= STATE_COUNT_THRESHOLD:
+                    self.last_state = self.state
+                    light_wp = light_wp if state == TrafficLight.RED else -1
+                    self.last_wp = light_wp
+                    self.upcoming_red_light_pub.publish(Int32(light_wp))
+                    print(light_wp)
+                else:
+                    self.upcoming_red_light_pub.publish(Int32(self.last_wp))
+                    print(self.last_wp)
+                self.state_count += 1
+            rate.sleep()
 
     def pose_cb(self, msg):
         self.pose = msg
@@ -82,26 +111,10 @@ class TLDetector(object):
         if self.frame_count == 0:
             self.has_image = True
             self.camera_image = msg
-            light_wp, state = self.process_traffic_lights()
-            rospy.logwarn("Closet light wp: {0} \n And light state: {1}".format(light_wp, self.tlstate[state]))
+        else:
+            self.has_image = False
+            self.camera_image = None
 
-            '''
-            Publish upcoming red lights at camera frequency.
-            Each predicted state has to occur `STATE_COUNT_THRESHOLD` number
-            of times till we start using it. Otherwise the previous stable state is
-            used.
-            '''
-            if self.state != state:
-                self.state_count = 0
-                self.state = state
-            elif self.state_count >= STATE_COUNT_THRESHOLD:
-                self.last_state = self.state
-                light_wp = light_wp if state == TrafficLight.RED else -1
-                self.last_wp = light_wp
-                self.upcoming_red_light_pub.publish(Int32(light_wp))
-            else:
-                self.upcoming_red_light_pub.publish(Int32(self.last_wp))
-            self.state_count += 1
 
         self.frame_count += 1;
         self.frame_count = self.frame_count % EVERY_NTH_IMAGE
