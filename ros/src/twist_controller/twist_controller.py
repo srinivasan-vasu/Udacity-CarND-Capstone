@@ -13,9 +13,9 @@ class Controller(object):
         # TODO: Implement
         self.yaw_controller = YawController(car_prm.wheel_base, car_prm.steer_ratio, 0.1, car_prm.max_lat_accel, car_prm.max_steer_angle)
 
-        self.kp = 0.85
-        self.ki = 0.
-        self.kd = 0.08
+        self.kp = 0.3
+        self.ki = 0.0
+        self.kd = 0.5
         self.decel_limit = car_prm.decel_limit
         self.accel_limit = car_prm.accel_limit
         self.throttle_controller = PID(self.kp, self.ki, self.kd, self.decel_limit, self.accel_limit)
