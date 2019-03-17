@@ -2,7 +2,7 @@
 
 import math
 import rospy
-from geometry_msgs.msg import PoseStamped
+from geometry_msgs.msg import PoseStamped, TwistStamped
 from styx_msgs.msg import Lane, Waypoint
 from scipy.spatial import KDTree
 from std_msgs.msg import Int32
@@ -33,11 +33,8 @@ class WaypointUpdater(object):
 
         rospy.Subscriber('/current_pose', PoseStamped, self.pose_cb)
         rospy.Subscriber('/base_waypoints', Lane, self.waypoints_cb)
-
-
-        # TODO: Add a subscriber for /traffic_waypoint and /obstacle_waypoint below
+        rospy.Subscriber('/current_velocity', TwistStamped, self.velocity_cb)
         rospy.Subscriber('/traffic_waypoint', Int32, self.traffic_cb)
-        #rospy.Subscriber('/obstacle_waypoint', Int32, self.obstacle_cb)
 
         self.final_waypoints_pub = rospy.Publisher('final_waypoints', Lane, queue_size=1)
 
@@ -47,14 +44,17 @@ class WaypointUpdater(object):
         self.stopline_wp_idx = -1
         self.base_waypoint_count = None
         self.waypoints_tree = None
+        self.velocity = 0
+        self.max_velocity = 0
 
         self.loop()
 
     def loop(self):
         rate = rospy.Rate(REFRESH_RATE)
         while not rospy.is_shutdown():
-            print(' no data')
+
             if self.current_pose and self.base_waypoints:
+                self.update_speedLimit()
                 self.publish_waypoints()
             rate.sleep()
 
@@ -72,6 +72,14 @@ class WaypointUpdater(object):
 
         return closest_waypoint_idx
 
+    def update_speedLimit(self):
+        temp_velocity = 0.95*(self.kmph2mps(rospy.get_param('/waypoint_loader/velocity')))
+        if self.max_velocity != temp_velocity:
+                    self.max_velocity = temp_velocity
+                    for waypoint in self.base_waypoints.waypoints:
+                        waypoint.twist.twist.linear.x = self.max_velocity
+
+
     def publish_waypoints(self):
         final_lane = self.generate_lane()
         self.final_waypoints_pub.publish(final_lane)
@@ -85,11 +93,12 @@ class WaypointUpdater(object):
 
         if self.stopline_wp_idx == -1 or (self.stopline_wp_idx >= farthest_idx):
             lane.waypoints = base_waypoints
-            rospy.logwarn("GO")
+            # rospy.logwarn("GO")
         else:
             lane.waypoints = self.deceleration_waypoint(base_waypoints, closest_idx)
-            rospy.logwarn("STOP")
-
+            rospy.logwarn("STOP : %s, %s", self.stopline_wp_idx, closest_idx)
+            rospy.logwarn("velocity : %s", self.get_waypoint_velocity(lane.waypoints[-1]))
+        
         return lane
 
     def deceleration_waypoint(self, waypoints, closest_idx):
@@ -102,7 +111,7 @@ class WaypointUpdater(object):
 
             stop_idx = max(self.stopline_wp_idx - closest_idx - 2, 0)# -2 to keep the car before the stop line not on it.
             dist = self.distance(waypoints, i, stop_idx)
-            vel = math.sqrt(2* MAX_DECEL* dist)
+            vel = 0.2*(MAX_DECEL* dist)
 
             if vel  < 1.0:
                 vel = 0
@@ -112,6 +121,25 @@ class WaypointUpdater(object):
 
         return temp
 
+    def aceleration_waypoint(self, waypoints, closest_idx):
+        temp = []
+
+        for i, wp in enumerate(waypoints):
+
+            p = Waypoint()
+            p.pose = wp.pose
+
+            stop_idx = max(self.stopline_wp_idx - closest_idx - 2, 0)# -2 to keep the car before the stop line not on it.
+            dist = self.distance(waypoints, i, stop_idx)
+            vel = 0.2*(MAX_DECEL* dist)
+
+            if vel  < 1.0:
+                vel = 0
+
+            p.twist.twist.linear.x = min(vel, wp.twist.twist.linear.x)
+            temp.append(p)
+
+        return temp
 
 
     def unpack_waypoint_coords(self, waypoint):
@@ -139,12 +167,21 @@ class WaypointUpdater(object):
     def pose_cb(self, msg):
         self.current_pose = msg.pose
 
+    def velocity_cb(self,msg):        
+        self.velocity = msg.twist.linear.x
+
     def waypoints_cb(self, waypoints):
         if not self.base_waypoints:
+          self.max_velocity = 0.95*(self.kmph2mps(rospy.get_param('/waypoint_loader/velocity')))
+
           self.base_waypoints = waypoints
+          for waypoint in self.base_waypoints.waypoints:
+                        waypoint.twist.twist.linear.x = self.max_velocity
+
           self.base_waypoint_count = len(waypoints.waypoints)
           waypoints_xy = [[waypoint.pose.pose.position.x, waypoint.pose.pose.position.y] for waypoint in waypoints.waypoints]
           self.waypoints_tree = KDTree(waypoints_xy)
+
 
     def traffic_cb(self, msg):
         # TODO: Callback for /traffic_waypoint message. Implement
@@ -167,6 +204,9 @@ class WaypointUpdater(object):
             dist += dl(waypoints[wp1].pose.pose.position, waypoints[i].pose.pose.position)
             wp1 = i
         return dist
+
+    def kmph2mps(self, velocity_kmph):
+        return (velocity_kmph * 1000.) / (60. * 60.)
 
 if __name__ == '__main__':
     try:
