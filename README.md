@@ -2,7 +2,7 @@
 _Udacity "Self-Driving Car Engineer" Course_<br>
 _Term #3 \ Project #3_
 <br><br>
-_**Keywords**: Autonomous driving, Robot Operating System, path planning, machine learning, image classification, drive by wire_
+_**Keywords**: Autonomous driving, Robot Operating System, path planning, machine learning, image classification, drive by wire._
 <br><br>
 _Video Output_:<br>
 https://vimeo.com/...<br>
@@ -49,7 +49,7 @@ This project implements a reduced subset of the functionality described above, s
 A diagram illustrating the ROS nodes implemented in this project and how they relate to the subsystems typically found in an autonomous vehicle as described above is shown below. Note that obstacle detection was not implemented in this project.
 
 <p align="center">
-<img src="imgs/architecture.png" width="800"><br>
+<img src="imgs/architecture.png" width="900"><br>
 <i>Source: Udacity.</i>
 </p>
 
