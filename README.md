@@ -36,9 +36,9 @@ This section provides a brief overview of the principal software subsystems typi
 | Planning | Behaviour and path planning. |
 | Control | Send control commands to the vehicle. |
 
-In what is termed sensor fusion, results of individual measurements from seperate sensors are typically combined using a Kalman filter. Sensor fusion data is passed to the perception module, which is responsible for localising the vehicle's position and obtaining an understanding of the vehicle's environment. Localisation is achieved by analysing sensor and map data to determine the vehicle's location.  Common techniques include Markov localisation and particle filters. An understanding of the vehicle's environment can be obtained by applying image processing, machine learning and other means to accomplish tasks such as lane detection, traffic sign recognition, object detection and tracking and free space detection.
+In a step termed sensor fusion, results of individual measurements from separate sensors are combined using a Kalman filter. Sensor fusion data is passed to the perception module, which is responsible for localizing the vehicle's position and obtaining an understanding of the vehicle's environment. Localization is achieved by analysing sensor and map data to determine the vehicle's location.  Common techniques include Markov localization and particle filters. An understanding of the vehicle's environment can be obtained by applying image processing, machine learning and other means to perform tasks such as lane detection, traffic sign recognition, object detection and tracking and free space detection.
 
-The output of the perception module is passed to the planning module. The planning module is responsible for route planning, predicting the trajectories of nearby vehicles, behaviour planning and trajectory generation. Path planning may make use of search algorithms such as the A* search algorithm or a dynamic programming approach to find the optimum trajectory given the available information. Predicting the behaviour of other vehicles can be achieved by employing a model based approach using a process model or by a data driven approach which might for example make use of a naive Bayes classifier.
+The output of the perception module is passed to the planning module. The planning module is responsible for route planning, predicting the trajectories of nearby vehicles, behaviour planning and trajectory generation. Path planning may make use of search algorithms such as the A* search algorithm or a dynamic programming approach to find the optimum trajectory given the available information. Predicting the behaviour of other vehicles can be achieved by employing a model based approach using a process model or by a data driven approach e.g. using a naive Bayes classifier.
 
 Effecting the trajectory specified by the planning module is the responsibility of the control module, which typically makes use of PID, MPC or other controller types to assert control over the acceleration, braking and steering of the vehicle through a drive by wire (DBW) interface. 
 
@@ -49,7 +49,7 @@ This project implements a reduced subset of the functionality described above, s
 A diagram illustrating the ROS nodes implemented in this project and how they relate to the subsystems typically found in an autonomous vehicle as described above is shown below. Note that obstacle detection was not implemented in this project.
 
 <p align="center">
-<img src="imgs/architecture.png" width="400"><br>
+<img src="imgs/architecture.png" width="800"><br>
 <i>Source: Udacity.</i>
 </p>
 
@@ -58,7 +58,7 @@ A diagram illustrating the ROS nodes implemented in this project and how they re
 todo
 
 <p align="center">
-<img src="imgs/waypoint-updater-ros.png" width="400"><br>
+<img src="imgs/waypoint-updater-ros.png" width="600"><br>
 <i>Source: Udacity.</i>
 </p>
 
@@ -71,7 +71,7 @@ todo
 todo
 
 <p align="center">
-<img src="imgs/dbw-node-ros.png" width="400"><br>
+<img src="imgs/dbw-node-ros.png" width="600"><br>
 <i>Source: Udacity.</i>
 </p>
 
@@ -80,7 +80,7 @@ todo
 todo
 
 <p align="center">
-<img src="imgs/tl-detector-ros.png" width="400"><br>
+<img src="imgs/tl-detector-ros.png" width="600"><br>
 <i>Source: Udacity.</i>
 </p>
 
