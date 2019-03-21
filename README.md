@@ -2,7 +2,7 @@
 _Udacity "Self-Driving Car Engineer" Course_<br>
 _Term #3 \ Project #3_
 <br><br>
-_-- Chang, Kenneth, Mahmoud, Srinivasan, Joydeep --_
+_- Chang, Kenneth, Mahmoud, Srinivasan, Joydeep -_
 <br><br>
 _**Keywords**: Autonomous driving, Robot Operating System, path planning, machine learning, image classification, drive by wire._
 <br><br>
@@ -55,7 +55,16 @@ A diagram illustrating the ROS nodes implemented in this project and how they re
 
 ## Waypoint Updater Node
 
-todo
+The waypoint updater node is implemented in 'waypoint_updater.py'. Its purpose is to set the target velocity of each waypoint based on traffic light data.  The node subscribes to the following topics.
+
+| Topics | Description |
+| - | - |
+| /base_waypoints | Contains the co-ordinates of map waypoints which the vehicle is to follow. |
+| /current_pose | Contains the current position of the vehicle. |
+| /traffic_waypoint | Contains traffic light data. |
+| /obstacle_waypoints | Not implemented. |
+
+The waypoint updater node publishes a list of waypoints ahead of the vehicle and their target velocities to the topic '/final_waypoints'.
 
 <p align="center">
 <img src="imgs/waypoint-updater-ros.png" width="600"><br>
@@ -64,7 +73,11 @@ todo
 
 ### Path Planning
 
+todo
+
 ### Target Velocity
+
+todo
 
 ## Drive by Wire Node
 
