@@ -81,7 +81,6 @@ todo
 
 ## Drive by Wire Node
 
-
 <p align="center">
 <img src="imgs/dbw-node-ros.png" width="600"><br>
 <i>Image source: Udacity.</i>
