@@ -81,12 +81,31 @@ todo
 
 ## Drive by Wire Node
 
-todo
 
 <p align="center">
 <img src="imgs/dbw-node-ros.png" width="600"><br>
 <i>Image source: Udacity.</i>
 </p>
+
+The Test Vehicle is controlled by Drive By Wire Module that controls throttle, brake and steering. When manual control is disabled i.e. dbw_enabled is enabled, control values for steering, throttle and brake are calculated using subscribed topics and published to /vehicle/throttle_cmd, /vehicle/steering_cmd, /vehicle/brake_cmd. 
+
+#Inputs
+
+| Topics | Description |
+| - | - |
+| /vehicle/dbw_enabled | Contains whether dbw node enabled or disabled|
+| /current_velocity | Contains the current velocity of the vehicle. |
+| /twist_cmd | Contains waypoint follower data that have necessary information for controller |
+
+#Outputs
+
+| Topics | Description |
+| - | - |
+| /vehicle/throttle_cmd | Contains throttle control information|
+| /vehicle/steering_cmd | Contains steering control information |
+| /vehicle/brake_cmd | Contains brake control information |
+
+The Controller algorithm is implemented in twist_controller.py file which considers PID control for throttle and yaw control for steering and finally filtered using low pass filter. PID and Yaw Controller algorithms are implemented in pid.py and yaw_controller.py files respectively.
 
 ## Traffic Light Detection
 
