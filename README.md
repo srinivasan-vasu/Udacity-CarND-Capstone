@@ -77,7 +77,16 @@ todo
 
 ### Target Velocity
 
-todo
+  We control the velocity to guarantee that the jerk and acceleration are not too high. This could cause a disconfort feeling for the passenger. The acceptable range should not exceed 10 m/s^2 for acceleration and 10 m/s^3 for jerk. We have two cases for changing the vehicle speed:
+1. Matching speed limits
+2. stopping for a Traffic light
+
+  Considering the first case, we implemented a limit for acceleration in the PID controller to limit the control action based on the error. We assumed the car travel at 95% of the speed limit to don't violate the road speed limit which is caused by The PID controller steady state error and/or overshoot. We implemented a Velocity updater that adjust the car to the new limit, so we can be flexable to road speed limit changes.The velocity updater update the entire base waypoints because we update upon the change in the speed limit.
+  
+  We needed to stop at the traffic light when it turns red. We tried to create a smooth deceleration so we don't generate too high jerk. We created a linear deceleration depend on the distance between the vehicle and the traffic light. We calculate the velocity based on univariable equation whch depent on distance. 
+V = K * Distance, 
+      K is configurable parameter to tune the deceleration.
+      a = K, maximum value for acceleration.
 
 ## Drive by Wire Node
 
