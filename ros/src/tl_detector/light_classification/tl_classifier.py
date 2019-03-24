@@ -4,8 +4,12 @@ import numpy as np
 import datetime
 
 class TLClassifier(object):
-    def __init__(self):
-        PATH_TO_GRAPH = r'light_classification/model/ssd/frozen_inference_graph.pb'
+    def __init__(self, is_site):
+
+        if is_site:
+            PATH_TO_GRAPH = r'light_classification/model/site/ssd/frozen_inference_graph.pb'
+        else:
+            PATH_TO_GRAPH = r'light_classification/model/sim/ssd/frozen_inference_graph.pb'
 
         self.graph = tf.Graph()
         self.threshold = .5
@@ -43,14 +47,13 @@ class TLClassifier(object):
                 feed_dict={self.image_tensor: img_expand})
             end = datetime.datetime.now()
             c = end - start
-            # print(c.total_seconds())
 
         boxes = np.squeeze(boxes)
         scores = np.squeeze(scores)
         classes = np.squeeze(classes).astype(np.int32)
 
-        print('SCORES: ', scores[0])
-        print('CLASSES: ', classes[0])
+        # print('SCORES: ', scores[0])
+        # print('CLASSES: ', classes[0])
 
         if scores[0] > self.threshold:
             if classes[0] == 1:

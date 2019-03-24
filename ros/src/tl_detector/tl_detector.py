@@ -39,16 +39,17 @@ class TLDetector(object):
         rely on the position of the light and the camera image to predict it.
         '''
         sub3 = rospy.Subscriber('/vehicle/traffic_lights', TrafficLightArray, self.traffic_cb)
-        sub6 = rospy.Subscriber('/image_color', Image, self.image_cb, queue_size=1, buff_size=2**24)
-        #sub6 = rospy.Subscriber('/image_color', Image, self.image_cb, queue_size=1)
+        #sub6 = rospy.Subscriber('/image_color', Image, self.image_cb, queue_size=1, buff_size=2**24)
+        sub6 = rospy.Subscriber('/image_color', Image, self.image_cb, queue_size=1)
 
         config_string = rospy.get_param("/traffic_light_config")
         self.config = yaml.load(config_string)
+        self.is_site = self.config["is_site"]
 
         self.upcoming_red_light_pub = rospy.Publisher('/traffic_waypoint', Int32, queue_size=1)
 
         self.bridge = CvBridge()
-        self.light_classifier = TLClassifier()
+        self.light_classifier = TLClassifier(self.is_site)
         self.listener = tf.TransformListener()
 
         self.state = TrafficLight.UNKNOWN
@@ -56,8 +57,8 @@ class TLDetector(object):
         self.last_wp = -1
         self.state_count = 0
 
-        rospy.spin()
-        #self.ros_spin()
+        #rospy.spin()
+        self.ros_spin()
 
     def ros_spin(self):
         rate = rospy.Rate(20)
@@ -82,7 +83,6 @@ class TLDetector(object):
                     self.upcoming_red_light_pub.publish(Int32(light_wp))
                 else:
                     self.upcoming_red_light_pub.publish(Int32(self.last_wp))
-                    print(self.last_wp)
                 self.state_count += 1
             rate.sleep()
 
@@ -108,10 +108,10 @@ class TLDetector(object):
         """
         self.has_image = True
         self.camera_image = msg
-        print('Camera Image')
+        # print('Camera Image')
 
-        light_wp, state = self.process_traffic_lights()
-        rospy.logwarn("Closet light wp: {0} \n And light state: {1}".format(light_wp, self.tlstate[state]))
+        #light_wp, state = self.process_traffic_lights()
+        #rospy.logwarn("Closet light wp: {0} \n And light state: {1}".format(light_wp, self.tlstate[state]))
 
         '''
         Publish upcoming red lights at camera frequency.
@@ -119,18 +119,17 @@ class TLDetector(object):
         of times till we start using it. Otherwise the previous stable state is
         used.
         '''
-        if self.state != state:
-            self.state_count = 0
-            self.state = state
-        elif self.state_count >= STATE_COUNT_THRESHOLD:
-            self.last_state = self.state
-            light_wp = light_wp if state == TrafficLight.RED else -1
-            self.last_wp = light_wp
-            self.upcoming_red_light_pub.publish(Int32(light_wp))
-        else:
-            self.upcoming_red_light_pub.publish(Int32(self.last_wp))
-            print(self.last_wp)
-        self.state_count += 1
+        #if self.state != state:
+        #    self.state_count = 0
+        #    self.state = state
+        #elif self.state_count >= STATE_COUNT_THRESHOLD:
+        #    self.last_state = self.state
+        #    light_wp = light_wp if state == TrafficLight.RED else -1
+        #    self.last_wp = light_wp
+        #    self.upcoming_red_light_pub.publish(Int32(light_wp))
+        #else:
+        #    self.upcoming_red_light_pub.publish(Int32(self.last_wp))
+        #self.state_count += 1
 
     def get_closest_waypoint(self, x, y):
         """Identifies the closest path waypoint to the given position
@@ -142,7 +141,6 @@ class TLDetector(object):
             int: index of the closest waypoint in self.waypoints
 
         """
-        #TODO implement
         closest_idx = self.waypoint_tree.query([x, y], 1)[1]
         return closest_idx
 
@@ -156,7 +154,6 @@ class TLDetector(object):
             int: ID of traffic light color (specified in styx_msgs/TrafficLight)
 
         """
-        #return light.state
         if(not self.has_image):
             self.prev_light_loc = None
             return False
