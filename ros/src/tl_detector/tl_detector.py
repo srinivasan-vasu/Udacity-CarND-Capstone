@@ -13,7 +13,6 @@ import yaml
 from scipy.spatial import KDTree
 
 STATE_COUNT_THRESHOLD = 3
-EVERY_NTH_IMAGE = 5
 
 class TLDetector(object):
     def __init__(self):
@@ -63,7 +62,7 @@ class TLDetector(object):
         while not rospy.is_shutdown():
             if self.camera_image is not None and self.waypoints is not None:
                 light_wp, state = self.process_traffic_lights()
-                rospy.logwarn("Closet light wp: {0} \n And light state: {1}".format(light_wp, self.tlstate[state]))
+                # rospy.logwarn("Closet light wp: {0} \n And light state: {1}".format(light_wp, self.tlstate[state]))
 
                 '''
                 Publish upcoming red lights at camera frequency.
@@ -156,7 +155,6 @@ class TLDetector(object):
         if(self.pose):
             car_wp_idx = self.get_closest_waypoint(self.pose.pose.position.x, self.pose.pose.position.y)
 
-            #TODO find the closest visible traffic light (if one exists)
             diff = len(self.waypoints.waypoints)
             for i, light in enumerate(self.lights):
                 # Get stop line waypoint index

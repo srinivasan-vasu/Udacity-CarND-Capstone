@@ -96,8 +96,8 @@ class WaypointUpdater(object):
             # rospy.logwarn("GO")
         else:
             lane.waypoints = self.deceleration_waypoint(base_waypoints, closest_idx)
-            rospy.logwarn("STOP : %s, %s", self.stopline_wp_idx, closest_idx)
-            rospy.logwarn("velocity : %s", self.get_waypoint_velocity(lane.waypoints[-1]))
+            # rospy.logwarn("STOP : %s, %s", self.stopline_wp_idx, closest_idx)
+            # rospy.logwarn("velocity : %s", self.get_waypoint_velocity(lane.waypoints[-1]))
         
         return lane
 
