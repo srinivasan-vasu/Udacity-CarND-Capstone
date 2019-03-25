@@ -1,4 +1,6 @@
 ## A. Team Members 
+_Team: AutoDreamCar_
+
 |  Name                                   |    Email Address     			  |
 |:---------------------------------------:|:---------------------------------:|
 | Joydeep Ball		                      |   joydeep.ball@gmail.com    	  |
@@ -10,7 +12,7 @@
 
 ## B. Capstone Project Write-Up
 _Udacity "Self-Driving Car Engineer" Course_<br>
-_Term AutoDreamCar \ Project Udacity-CarND-Capstone_
+_Term #3 \ Project #3_<br>
 
 _**Keywords**: Autonomous driving, Robot Operating System, path planning, machine learning, image classification, drive by wire._
 <br><br>
