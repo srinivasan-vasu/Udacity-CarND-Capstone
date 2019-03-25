@@ -1,5 +1,5 @@
 # A. Team Members 
-_Team: AutoDreamCar_
+Team: AutoDreamCar
 
 |  Name                                   |    Email Address     			  |
 |:---------------------------------------:|:---------------------------------:|
@@ -63,12 +63,17 @@ A diagram illustrating the ROS nodes implemented in this project and how they re
 
 ### Hardware
 
-The Udacity self driving car on which the solution will be evaluated subsequent to submission has the following hardware spec.
+After submitting the project, the solution will be evaluated using the Udacity self driving car. It is equipped with the following hardware.
 * 31.4 GiB Memory
 * Intel Core i7-6700K CPU @ 4 GHz x 8
 * TITAN X Graphics
 * 64-bit OS
-<br>
+
+<p align="center">
+<img src="imgs/udacity-car.jpeg" width="800"><br>
+<i>The Udacity self driving car. (Source: Udacity)</i>
+</p>
+<br><br>
 
 ## Traffic Light Detection Node
 
@@ -87,7 +92,7 @@ The traffic light detection node publishes RED traffic light waypoints via the '
 </p>
 
 This node uses a TensorFlow trained model for classification of the traffic light colour. Classification is implemented in '/tl_detector/light_classification_model/tl_classfier.py'. See the repository [Traffic Light Classification](https://github.com/linuxairhead/light_classification) for further details about the model classifier.
-<br>
+<br><br>
 
 ## Waypoint Updater Node
 
@@ -120,7 +125,7 @@ It is necessary to stop at the traffic light when it turns red. The aim is to ob
 V = K * Distance, where:<br>
 K is configurable parameter to tune the deceleration.<br>
 a = K, maximum value for acceleration.
-<br>
+<br><br>
 
 ## Drive by Wire Node
 
@@ -130,7 +135,7 @@ The vehicle is controlled via a drive by wire interface which programs the throt
 <i>Image source: Udacity.</i>
 </p>
 
-### Inputs
+**Inputs**
 
 | Topics | Description |
 | - | - |
@@ -138,7 +143,7 @@ The vehicle is controlled via a drive by wire interface which programs the throt
 | /current_velocity | Contains the current velocity of the vehicle. |
 | /twist_cmd | Contains waypoint follower data with necessary information for the controller. |
 
-### Outputs
+**Outputs**
 
 | Topics | Description |
 | - | - |
@@ -147,7 +152,7 @@ The vehicle is controlled via a drive by wire interface which programs the throt
 | /vehicle/brake_cmd | Contains brake control information. |
 
 The controller algorithm is implemented in 'twist_controller.py'. It uses a PID controller for control of the throttle, yaw control for control of the steering and finally filtered using low pass filter. The PID and yaw controller algorithms are implemented in 'pid.py' and 'yaw_controller.py' respectively.
-<br>
+<br><br>
 
 ## Result and Discussion
 
