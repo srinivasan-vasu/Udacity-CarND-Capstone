@@ -22,7 +22,7 @@ _Video Output_: [AutoDreamCar](https://www.youtube.com/watch?v=cIdQeTc6HjU&t=24s
 
 The final project of the Udacity "Self-Driving Car Engineer" course is a team code completion exercise in which the objective is to program a real car to drive autonomously around a simple test track. This is achieved by writing Robot Operating System (ROS) nodes implementing path planning and control by drive by wire (DBW) and by implementing a traffic light classifier by training a neural network. 
 
-A simulator was used for testing during development. Please see the installation instructions provided in 'SETUP.md' to run the program with the simulator.
+A simulator was used for testing during development. Please see the installation instructions appended to the end of this report in order to run the program with the simulator.
 
 <p align="center">
 <img src="imgs/unity.png" width="400"><br>
@@ -55,7 +55,6 @@ Effecting the trajectory specified by the planning module is the responsibility 
 This project implements a reduced subset of the functionality described above, sufficient only to drive a car around a simple test track. The project is implemented using Robot Operating System (ROS), which is an open source robotics framework providing libraries and tools for working with hardware and passing messages between components. A program implemented in ROS consists of nodes which pass messages to each other through "topics" or "services".
 
 A diagram illustrating the ROS nodes implemented in this project and how they relate to the subsystems typically found in an autonomous vehicle as described above is shown below. Note that obstacle detection was not implemented in this project.
-
 <p align="center">
 <img src="imgs/architecture.png" width="900"><br>
 <i>Image source: Udacity.</i>
@@ -63,7 +62,7 @@ A diagram illustrating the ROS nodes implemented in this project and how they re
 
 ## Traffic Light Detection Node
 
-The traffic light detection node is implemented in 'tl_detector.py'. Its purpose is to detect traffic light RED, GREEN, YELLOW and publish RED light waypoint. The node subscribes to the following topics.
+The traffic light detection node is implemented in 'tl_detector.py'. Its purpose is to detect traffic light colours {RED, GREEN, YELLOW} and publish {RED} light waypoints. The node subscribes to the following topics.
 
 | Topics | Description |
 | - | - |
@@ -71,14 +70,13 @@ The traffic light detection node is implemented in 'tl_detector.py'. Its purpose
 | /current_pose | Contains the current position of the vehicle. |
 | /image_color | Contains camera frame. |
 
-The traffic light detection node published RED traffic light waypoints via '/traffic_waypoint' topic.
-
+The traffic light detection node publishes RED traffic light waypoints via the '/traffic_waypoint' topic.
 <p align="center">
 <img src="imgs/tl-detector-ros.png" width="600"><br>
 <i>Image source: Udacity.</i>
 </p>
 
-This node is using tensorflow trained model for classification of traffic light. The classification is implemented in '/tl_detector/light_classification_model/tl_classfier.py'. See the details about [Traffic Light Classification](https://github.com/linuxairhead/light_classification)
+This node uses a TensorFlow trained model for classification of the traffic light colour. Classification is implemented in '/tl_detector/light_classification_model/tl_classfier.py'. See the repository [Traffic Light Classification](https://github.com/linuxairhead/light_classification) for further details about the model classifier.
 
 ## Waypoint Updater Node
 
@@ -92,7 +90,6 @@ The waypoint updater node is implemented in 'waypoint_updater.py'. Its purpose i
 | /obstacle_waypoints | Not implemented. |
 
 The waypoint updater node publishes a list of waypoints ahead of the vehicle and their target velocities to the topic '/final_waypoints'.
-
 <p align="center">
 <img src="imgs/waypoint-updater-ros.png" width="600"><br>
 <i>Image source: Udacity.</i>
@@ -100,43 +97,43 @@ The waypoint updater node publishes a list of waypoints ahead of the vehicle and
 
 ### Target Velocity
 
-  We control the velocity to guarantee that the jerk and acceleration are not too high. This could cause a disconfort feeling for the passenger. The acceptable range should not exceed 10 m/s^2 for acceleration and 10 m/s^3 for jerk. We have two cases for changing the vehicle speed:
-1. Matching speed limits
-2. stopping for a Traffic light
+The vehicle's velocity is controlled in such a way so as to guarantee that the jerk and acceleration are not too high. This prevents discomfort for the passenger. Limits of 10 m/s^2 for acceleration and 10 m/s^3 for jerk apply. 
 
-  Considering the first case, we implemented a limit for acceleration in the PID controller to limit the control action based on the error. We assumed the car travel at 95% of the speed limit to don't violate the road speed limit which is caused by The PID controller steady state error and/or overshoot. We implemented a Velocity updater that adjust the car to the new limit, so we can be flexable to road speed limit changes.The velocity updater update the entire base waypoints because we update upon the change in the speed limit.
+Two scenarios exist for changing the vehicle speed.
+1. Matching speed limits.
+2. Stopping for a traffic light.
+
+Considering the first case, we implemented a limit for acceleration in the PID controller to limit the control action based on the error. We assumed the car travel at 95% of the speed limit to don't violate the road speed limit which is caused by The PID controller steady state error and/or overshoot. We implemented a Velocity updater that adjust the car to the new limit, so we can be flexable to road speed limit changes.The velocity updater update the entire base waypoints because we update upon the change in the speed limit.
   
-  We needed to stop at the traffic light when it turns red. We tried to create a smooth deceleration so we don't generate too high jerk. We created a linear deceleration depend on the distance between the vehicle and the traffic light. We calculate the velocity based on univariable equation whch depent on distance. 
-V = K * Distance, 
-      K is configurable parameter to tune the deceleration.
-      a = K, maximum value for acceleration.
+It is necessary to stop at the traffic light when it turns red. The aim is to obtain a smooth deceleration so as to avoid high jerk. The module implements linear deceleration proportional to the distance between the vehicle and the traffic light. Velocity is calculated based on a univariable equation which depends on distance. 
+V = K * Distance, where:<br>
+K is configurable parameter to tune the deceleration.<br>
+a = K, maximum value for acceleration.
 
 ## Drive by Wire Node
 
+The vehicle is controlled via a drive by wire interface which programs the throttle, brake and steering. When manual control is disabled (i.e. dbw_enabled is enabled), control values for steering, throttle and brake are calculated using subscribed topics and published to the topics '/vehicle/throttle_cmd', '/vehicle/steering_cmd' and '/vehicle/brake_cmd'. 
 <p align="center">
 <img src="imgs/dbw-node-ros.png" width="600"><br>
 <i>Image source: Udacity.</i>
 </p>
-
-The Test Vehicle is controlled by Drive By Wire Module that controls throttle, brake and steering. When manual control is disabled i.e. dbw_enabled is enabled, control values for steering, throttle and brake are calculated using subscribed topics and published to /vehicle/throttle_cmd, /vehicle/steering_cmd, /vehicle/brake_cmd. 
-
 ### Inputs
 
 | Topics | Description |
 | - | - |
-| /vehicle/dbw_enabled | Contains whether dbw node enabled or disabled|
+| /vehicle/dbw_enabled | Specifies whether the DBW node is enabled or disabled. |
 | /current_velocity | Contains the current velocity of the vehicle. |
-| /twist_cmd | Contains waypoint follower data that have necessary information for controller |
+| /twist_cmd | Contains waypoint follower data with necessary information for the controller. |
 
 ### Outputs
 
 | Topics | Description |
 | - | - |
-| /vehicle/throttle_cmd | Contains throttle control information|
-| /vehicle/steering_cmd | Contains steering control information |
-| /vehicle/brake_cmd | Contains brake control information |
+| /vehicle/throttle_cmd | Contains throttle control information. |
+| /vehicle/steering_cmd | Contains steering control information. |
+| /vehicle/brake_cmd | Contains brake control information. |
 
-The Controller algorithm is implemented in twist_controller.py file which considers PID control for throttle and yaw control for steering and finally filtered using low pass filter. PID and Yaw Controller algorithms are implemented in pid.py and yaw_controller.py files respectively.
+The controller algorithm is implemented in 'twist_controller.py'. It uses a PID controller for control of the throttle, yaw control for control of the steering and finally filtered using low pass filter. The PID and yaw controller algorithms are implemented in 'pid.py' and 'yaw_controller.py' respectively.
 <br><br>
 ## C. Initial README (Setup Instructions)
 
