@@ -60,7 +60,7 @@ A diagram illustrating the ROS nodes implemented in this project and how they re
 <img src="imgs/architecture.png" width="900"><br>
 <i>Image source: Udacity.</i>
 </p>
-<br><br>
+<br>
 
 ### Hardware
 
