@@ -1,8 +1,4 @@
-## Capstone Project
-_Udacity "Self-Driving Car Engineer" Course_<br>
-_Term AutoDreamCar \ Project Udacity-CarND-Capstone_
-
-## Team Members 
+## A. Team Members 
 |  Name                                   |    Email Address     			  |
 |:---------------------------------------:|:---------------------------------:|
 | Joydeep Ball		                      |   joydeep.ball@gmail.com    	  |
@@ -10,6 +6,11 @@ _Term AutoDreamCar \ Project Udacity-CarND-Capstone_
 | Kenneth Strouts                         |   kds3@protonmail.com             |
 | Mahmoud Moataz                          |   mahmoud.moataz.zayed@gmail.com  |
 | Srinivasan Vasu                         |   srinivasan.vasu@outlook.com     |
+<br>
+
+## B. Capstone Project Write-Up
+_Udacity "Self-Driving Car Engineer" Course_<br>
+_Term AutoDreamCar \ Project Udacity-CarND-Capstone_
 
 _**Keywords**: Autonomous driving, Robot Operating System, path planning, machine learning, image classification, drive by wire._
 <br><br>
@@ -135,8 +136,8 @@ The Test Vehicle is controlled by Drive By Wire Module that controls throttle, b
 | /vehicle/brake_cmd | Contains brake control information |
 
 The Controller algorithm is implemented in twist_controller.py file which considers PID control for throttle and yaw control for steering and finally filtered using low pass filter. PID and Yaw Controller algorithms are implemented in pid.py and yaw_controller.py files respectively.
-
-### Initial README
+<br><br>
+## C. Initial README (Setup Instructions)
 
 This is the project repo for the final project of the Udacity Self-Driving Car Nanodegree: Programming a Real Self-Driving Car. For more information about the project, see the project introduction [here](https://classroom.udacity.com/nanodegrees/nd013/parts/6047fe34-d93c-4f50-8336-b70ef10cb4b2/modules/e1a23b06-329a-4684-a717-ad476f0d8dff/lessons/462c933d-9f24-42d3-8bdc-a08a5fc866e4/concepts/5ab4b122-83e6-436d-850f-9f4d26627fd9).
 
