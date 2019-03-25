@@ -28,6 +28,7 @@ A simulator was used for testing during development. Please see the installation
 <img src="imgs/unity.png" width="400"><br>
 <i>The car driving in the simulator.</i>
 </p>
+<br>
 
 ## System Architecture
 
@@ -60,6 +61,15 @@ A diagram illustrating the ROS nodes implemented in this project and how they re
 <i>Image source: Udacity.</i>
 </p>
 
+### Hardware
+
+The Udacity self driving car on which the solution will be evaluated subsequent to submission has the following hardware spec.
+* 31.4 GiB Memory
+* Intel Core i7-6700K CPU @ 4 GHz x 8
+* TITAN X Graphics
+* 64-bit OS
+<br>
+
 ## Traffic Light Detection Node
 
 The traffic light detection node is implemented in 'tl_detector.py'. Its purpose is to detect traffic light colours {RED, GREEN, YELLOW} and publish {RED} light waypoints. The node subscribes to the following topics.
@@ -77,6 +87,7 @@ The traffic light detection node publishes RED traffic light waypoints via the '
 </p>
 
 This node uses a TensorFlow trained model for classification of the traffic light colour. Classification is implemented in '/tl_detector/light_classification_model/tl_classfier.py'. See the repository [Traffic Light Classification](https://github.com/linuxairhead/light_classification) for further details about the model classifier.
+<br>
 
 ## Waypoint Updater Node
 
@@ -109,6 +120,7 @@ It is necessary to stop at the traffic light when it turns red. The aim is to ob
 V = K * Distance, where:<br>
 K is configurable parameter to tune the deceleration.<br>
 a = K, maximum value for acceleration.
+<br>
 
 ## Drive by Wire Node
 
@@ -135,10 +147,11 @@ The vehicle is controlled via a drive by wire interface which programs the throt
 | /vehicle/brake_cmd | Contains brake control information. |
 
 The controller algorithm is implemented in 'twist_controller.py'. It uses a PID controller for control of the throttle, yaw control for control of the steering and finally filtered using low pass filter. The PID and yaw controller algorithms are implemented in 'pid.py' and 'yaw_controller.py' respectively.
+<br>
 
 ## Result and Discussion
 
-As can be observed in the attached [video](https://www.youtube.com/watch?v=cIdQeTc6HjU&t=24s), the vehicle is able to follow the path specified by the map waypoints while respecting the speed limit and obeying acceleration and jerk constraints.  The vehicle passes through the green traffic lights as intended and slows down to a stop for red traffic lights.
+As can be observed in the attached [video](https://www.youtube.com/watch?v=cIdQeTc6HjU&t=24s) recorded using the simulator, the vehicle is able to follow the path specified by the map waypoints while respecting the speed limit and obeying acceleration and jerk constraints.  The vehicle passes through the green traffic lights as intended and slows down to a stop for red traffic lights.
 <br><br>
 # C. Initial README (Setup Instructions)
 
