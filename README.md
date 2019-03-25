@@ -2,7 +2,7 @@
 _Udacity "Self-Driving Car Engineer" Course_<br>
 _Term AutoDreamCar \ Project Udacity-CarND-Capstone_
 
-## Project Team Members of Drive Safely
+## Team Members 
 |  Name                                   |    Email Address     			  |
 |:---------------------------------------:|:---------------------------------:|
 | Joydeep Ball		                      |   joydeep.ball@gmail.com    	  |
@@ -11,11 +11,10 @@ _Term AutoDreamCar \ Project Udacity-CarND-Capstone_
 | Mahmoud Moataz                          |   mahmoud.moataz.zayed@gmail.com  |
 | Srinivasan Vasu                         |   srinivasan.vasu@outlook.com     |
 
-<br><br>
 _**Keywords**: Autonomous driving, Robot Operating System, path planning, machine learning, image classification, drive by wire._
 <br><br>
 _Video Output_:<br>
-[AutoDreamCar] http://youtube.com<br>
+[AutoDreamCar](http://youtube.com)<br>
 
 ## Introduction
 
@@ -77,7 +76,7 @@ The traffic light detection node published RED traffic light waypoints via '/tra
 <i>Image source: Udacity.</i>
 </p>
 
-This node is using tensorflow trained model for classification of traffic light. The classification is implemented in '/tl_detector/light_classification_model/tl_classfier.py'. See the details about [Traffic Light Classification] https://github.com/linuxairhead/light_classification
+This node is using tensorflow trained model for classification of traffic light. The classification is implemented in '/tl_detector/light_classification_model/tl_classfier.py'. See the details about [Traffic Light Classification](https://github.com/linuxairhead/light_classification)
 
 ## Waypoint Updater Node
 
