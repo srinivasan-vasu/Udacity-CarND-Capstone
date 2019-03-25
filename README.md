@@ -1,5 +1,5 @@
 # A. Team Members 
-Team: AutoDreamCar
+**Team**: AutoDreamCar
 
 |  Name                                   |    Email Address     			  |
 |:---------------------------------------:|:---------------------------------:|
@@ -60,6 +60,7 @@ A diagram illustrating the ROS nodes implemented in this project and how they re
 <img src="imgs/architecture.png" width="900"><br>
 <i>Image source: Udacity.</i>
 </p>
+<br><br>
 
 ### Hardware
 
@@ -71,8 +72,13 @@ After submitting the project, the solution will be evaluated using the Udacity s
 
 <p align="center">
 <img src="imgs/udacity-car.jpeg" width="800"><br>
-<i>The Udacity self driving car. (Source: Udacity)</i>
+<i>The Udacity self driving car. (Image source: Udacity)</i>
 </p>
+
+Much of the testing performed during development was done using a [Paperspace](https://www.paperspace.com) "ML-in-a-Box (Ubuntu 16.04)" desktop enabled instance. The reason for this choice of testing environment is that the speed at which messages are passed between ROS nodes (up to 50 messages/sec) and the communication between the program and the simulator means that latency and the resulting loss in synchronisation poses a serious problem during development. The Paperspace instance was equipped with the following hardware.
+* 29 GiB Memory
+* Intel Xeon CPU @ 2.60 GHz x 8
+* NVIDIA Quadro P6000 GPU
 <br><br>
 
 ## Traffic Light Detection Node
@@ -156,7 +162,7 @@ The controller algorithm is implemented in 'twist_controller.py'. It uses a PID 
 
 ## Result and Discussion
 
-As can be observed in the attached [video](https://www.youtube.com/watch?v=cIdQeTc6HjU&t=24s) recorded using the simulator, the vehicle is able to follow the path specified by the map waypoints while respecting the speed limit and obeying acceleration and jerk constraints.  The vehicle passes through the green traffic lights as intended and slows down to a stop for red traffic lights.
+As can be observed in the attached [video](https://www.youtube.com/watch?v=cIdQeTc6HjU&t=24s) which was recorded using the simulator, the vehicle is able to follow the path specified by the map waypoints while respecting the speed limit and obeying acceleration and jerk constraints.  The vehicle passes through the green traffic lights as intended and slows down to a stop for red traffic lights.
 <br><br>
 # C. Initial README (Setup Instructions)
 
