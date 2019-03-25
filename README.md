@@ -16,8 +16,7 @@ _Term #3 \ Project #3_<br>
 
 _**Keywords**: Autonomous driving, Robot Operating System, path planning, machine learning, image classification, drive by wire._
 <br><br>
-_Video Output_:<br>
-[AutoDreamCar](https://www.youtube.com/watch?v=cIdQeTc6HjU&t=24s)<br>
+_Video Output_: [AutoDreamCar](https://www.youtube.com/watch?v=cIdQeTc6HjU&t=24s)<br>
 
 ## Introduction
 
