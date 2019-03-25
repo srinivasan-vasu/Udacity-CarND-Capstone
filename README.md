@@ -1,4 +1,4 @@
-## A. Team Members 
+# A. Team Members 
 _Team: AutoDreamCar_
 
 |  Name                                   |    Email Address     			  |
@@ -10,7 +10,7 @@ _Team: AutoDreamCar_
 | Srinivasan Vasu                         |   srinivasan.vasu@outlook.com     |
 <br>
 
-## B. Capstone Project Write-Up
+# B. Capstone Project Write-Up
 _Udacity "Self-Driving Car Engineer" Course_<br>
 _Term #3 \ Project #3_<br>
 
@@ -103,7 +103,7 @@ Two scenarios exist for changing the vehicle speed.
 1. Matching speed limits.
 2. Stopping for a traffic light.
 
-Considering the first case, we implemented a limit for acceleration in the PID controller to limit the control action based on the error. We assumed the car travel at 95% of the speed limit to don't violate the road speed limit which is caused by The PID controller steady state error and/or overshoot. We implemented a Velocity updater that adjust the car to the new limit, so we can be flexable to road speed limit changes.The velocity updater update the entire base waypoints because we update upon the change in the speed limit.
+A limit for the acceleration is implemented in the PID controller by limiting the control action based on the error. The car is set to travel at 95% of the speed limit so as to avoid violation of the road speed limit caused by the PID controller's steady state error and/or overshoot. A velocity updater is implemented to adjust the car to the new limit, while remaining flexible to road speed limit changes. The velocity updater updates the entire base waypoints because we update upon the change in the speed limit.
   
 It is necessary to stop at the traffic light when it turns red. The aim is to obtain a smooth deceleration so as to avoid high jerk. The module implements linear deceleration proportional to the distance between the vehicle and the traffic light. Velocity is calculated based on a univariable equation which depends on distance. 
 V = K * Distance, where:<br>
@@ -117,6 +117,7 @@ The vehicle is controlled via a drive by wire interface which programs the throt
 <img src="imgs/dbw-node-ros.png" width="600"><br>
 <i>Image source: Udacity.</i>
 </p>
+
 ### Inputs
 
 | Topics | Description |
@@ -134,8 +135,12 @@ The vehicle is controlled via a drive by wire interface which programs the throt
 | /vehicle/brake_cmd | Contains brake control information. |
 
 The controller algorithm is implemented in 'twist_controller.py'. It uses a PID controller for control of the throttle, yaw control for control of the steering and finally filtered using low pass filter. The PID and yaw controller algorithms are implemented in 'pid.py' and 'yaw_controller.py' respectively.
+
+## Result and Discussion
+
+As can be observed in the attached [video](https://www.youtube.com/watch?v=cIdQeTc6HjU&t=24s), the vehicle is able to follow the path specified by the map waypoints while respecting the speed limit and obeying acceleration and jerk constraints.  The vehicle passes through the green traffic lights as intended and slows down to a stop for red traffic lights.
 <br><br>
-## C. Initial README (Setup Instructions)
+# C. Initial README (Setup Instructions)
 
 This is the project repo for the final project of the Udacity Self-Driving Car Nanodegree: Programming a Real Self-Driving Car. For more information about the project, see the project introduction [here](https://classroom.udacity.com/nanodegrees/nd013/parts/6047fe34-d93c-4f50-8336-b70ef10cb4b2/modules/e1a23b06-329a-4684-a717-ad476f0d8dff/lessons/462c933d-9f24-42d3-8bdc-a08a5fc866e4/concepts/5ab4b122-83e6-436d-850f-9f4d26627fd9).
 
