@@ -14,7 +14,7 @@ _Term AutoDreamCar \ Project Udacity-CarND-Capstone_
 _**Keywords**: Autonomous driving, Robot Operating System, path planning, machine learning, image classification, drive by wire._
 <br><br>
 _Video Output_:<br>
-[AutoDreamCar](http://youtube.com)<br>
+[AutoDreamCar](https://www.youtube.com/watch?v=cIdQeTc6HjU&t=24s)<br>
 
 ## Introduction
 
@@ -118,7 +118,7 @@ V = K * Distance,
 
 The Test Vehicle is controlled by Drive By Wire Module that controls throttle, brake and steering. When manual control is disabled i.e. dbw_enabled is enabled, control values for steering, throttle and brake are calculated using subscribed topics and published to /vehicle/throttle_cmd, /vehicle/steering_cmd, /vehicle/brake_cmd. 
 
-# Inputs
+### Inputs
 
 | Topics | Description |
 | - | - |
@@ -126,7 +126,7 @@ The Test Vehicle is controlled by Drive By Wire Module that controls throttle, b
 | /current_velocity | Contains the current velocity of the vehicle. |
 | /twist_cmd | Contains waypoint follower data that have necessary information for controller |
 
-# Outputs
+### Outputs
 
 | Topics | Description |
 | - | - |
