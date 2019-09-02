@@ -3,11 +3,11 @@
 
 |  Name                                   |    Email Address     			  |
 |:---------------------------------------:|:---------------------------------:|
-| Joydeep Ball		                      |   joydeep.ball@gmail.com    	  |
-| Chang K Hong	                          |   changki.hong@gmail.com          |
-| Kenneth Strouts                         |   kds3@protonmail.com             |
-| Mahmoud Moataz                          |   mahmoud.moataz.zayed@gmail.com  |
-| Srinivasan Vasu                         |   srinivasan.vasu@outlook.com     |
+| Joydeep Ball		                      |   (redacted)    	  |
+| Chang K Hong	                          |   (redacted)          |
+| Kenneth Strouts                         |   (redacted)             |
+| Mahmoud Moataz                          |   (redacted)  |
+| Srinivasan Vasu                         |   (redacted)     |
 <br>
 
 # B. Capstone Project Write-Up
